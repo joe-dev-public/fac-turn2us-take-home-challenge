@@ -19,7 +19,7 @@ dateOfBirthInputEl.addEventListener('keydown', (event) => {
     // Digit[0-9], Numpad[0-9], Slash, etc. are OK
     const reDigit = new RegExp(/^Digit[0-9]$/);
     const reNumpad = new RegExp(/^Numpad[0-9]$/);
-    const reSlash = new RegExp(/^Slash$/);
+    const reSlash = new RegExp(/^(Slash|NumpadDivide)$/);
     const reOthers = new RegExp(/^(Backspace|Delete|Enter|NumpadEnter|Tab|Home|End|ArrowLeft|ArrowRight|ShitLeft|ShiftRight|ControlLeft|ControlRight)$/);
 
     if (
