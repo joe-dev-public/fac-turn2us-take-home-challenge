@@ -3,6 +3,7 @@
 const formEl = document.querySelector('form');
 const dateOfBirthInputEl = document.querySelector('input[name="dateOfBirth"]');
 
+const mainEl = document.querySelector('main');
 
 /*  Stretch goals:
         - format input as it's typed (as Turn2us form does)
@@ -67,6 +68,30 @@ dateOfBirthInputEl.addEventListener('input', (event) => {
     //console.log(ageInYears);
 
 //}
+
+
+function successPage() {
+
+    const html = `
+<h2>You're eligible to apply</h2>
+`;
+
+    mainEl.innerHTML = html;
+
+}
+
+
+function tooYoungPage() {
+
+    const html = `
+<h2>Sorry, you're not eligible to apply</h2>
+<p>You have to be at least 18 years old to apply.</p>
+`;
+
+    mainEl.innerHTML = html;
+
+}
+
 
 function isUser18OrOver(ddOfBirth, mmOfBirth, yyyyOfBirth) {
 
