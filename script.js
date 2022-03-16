@@ -2,14 +2,15 @@
 
 const formEl = document.querySelector('form');
 const dateOfBirthInputEl = document.querySelector('input[name="dateOfBirth"]');
-
 const mainEl = document.querySelector('main');
+const errMsgEl = document.querySelector('.error-message');
 
-/*  Stretch goals:
-        - format input as it's typed (as Turn2us form does)
-        - validate input (to some extent) as it's typed?
-*/
+
+// Stretch goal: validate input (to some extent) as it's typed? (i.e. don't allow certain keys)
 dateOfBirthInputEl.addEventListener('keydown', (event) => {
+
+    // We need to use the keydown even to get the keycode, I think.
+    // Stealing keydown events maybe isn't the best approach! Nothing built-in to browser?
 
     const keycode = event.code;
 
@@ -20,9 +21,6 @@ dateOfBirthInputEl.addEventListener('keydown', (event) => {
     const reNumpad = new RegExp(/^Numpad[0-9]$/);
     const reSlash = new RegExp(/^Slash$/);
     const reOthers = new RegExp(/^(Backspace|Delete|Enter|NumpadEnter|Tab|Home|End|ArrowLeft|ArrowRight|ShitLeft|ShiftRight|ControlLeft|ControlRight)$/);
-
-    // This maybe isn't the best approach, because it could mess with some user prefs.
-
 
     if (
         reDigit.test(keycode) === false &&
@@ -35,7 +33,12 @@ dateOfBirthInputEl.addEventListener('keydown', (event) => {
 
 });
 
+
+// Stretch goal (not done): format/constrain input as it's typed (as Turn2us form does)
 dateOfBirthInputEl.addEventListener('input', (event) => {
+
+    // Is it better to use the input event for validation?
+    // (Which will look at the whole value entered so far, not just the keys being pressed.)
 
     /*  Validation: allow
             [0-3][0-9] or [01-31] /
@@ -46,8 +49,6 @@ dateOfBirthInputEl.addEventListener('input', (event) => {
         (Could the browser handle this for us, e.g. input type=date with the date-picker
         suppressed?)
     */
-
-
 
     /*
         Formatting:
@@ -62,62 +63,21 @@ dateOfBirthInputEl.addEventListener('input', (event) => {
 });
 
 
-//function brokenAgeCalc(ddOfBirth, mmOfBirth, yyyyOfBirth) {
-
-    // The ms method doesn't work because ages are calculated by calendar date, not "actual age"!
-
-    /*  Calculate the age (just roughly for now):
-            - In a real system, we'd maybe use a well-tested library to do this.
-            - Here, we'll code an approximation from scratch that's "good enough".
-            - (i.e. if today is your 18th birthday or later, you're 18)
-    */
-
-    // Number of ms between epoch (January 1, 1970 00:00:00 UTC) and DOB:
-    //const msBetweenDOBAndEpoch = Date.parse(`${yyyyOfBirth}-${mmOfBirth}-${ddOfBirth}`);
-    // (It's negative if DOB is before epoch.)
-
-    // Number of ms between epoch and now:
-    //const msSinceEpoch = Date.now();
-
-    // We don't need to check sign of msBetweenDOBAndEpoch, as double negatives cancel.
-    //const ageInMs = msSinceEpoch - msBetweenDOBAndEpoch;
-
-    /*  Number of ms in one year:
-            - Roughly; mean number of days per year in Gregorian calendar is 365.2425
-                (src: https://en.wikipedia.org/wiki/Gregorian_calendar)
-            - 1000ms in 1s; 60s in 1min; 60min in 1h; 24h in 1day; ~365days in 1 year
-    */
-    //const numberOfMsInYear = 1000 * 60 * 60 * 24 * 365.2425;
-
-    // We only need the integer:
-    //const ageInYears = Math.floor(ageInMs / numberOfMsInYear);
-    //const ageInYears = ageInMs / numberOfMsInYear;
-
-    //console.log(ageInYears);
-
-//}
-
-
-function successPage() {
-
-    const html = `
-<h2>You're eligible to apply</h2>
-`;
-
-    mainEl.innerHTML = html;
-
+function validationErrorMessage() {
+    errMsgEl.innerText = 'Please enter your date of birth in the format dd/mm/yyyy';
+    errMsgEl.classList.remove('hidden');
 }
 
 
-function tooYoungPage() {
-
-    const html = `
-<h2>Sorry, you're not eligible to apply</h2>
-<p>You have to be at least 18 years old to apply.</p>
-`;
-
+function successMessage() {
+    const html = `<h2>You're eligible to apply</h2>`;
     mainEl.innerHTML = html;
+}
 
+
+function tooYoungMessage() {
+    const html = `<h2>Sorry, you're not eligible to apply</h2><p>You have to be at least 18 years old to apply.</p>`;
+    mainEl.innerHTML = html;
 }
 
 
@@ -166,6 +126,8 @@ function handleFormInput() {
     const myFormData = new FormData(formEl);
     const dateOfBirth = Object.fromEntries(myFormData)['dateOfBirth'];
 
+    errMsgEl.classList.add('hidden');
+
     // Do validation here?
     // Regex to test for valid date:
     // const re = new RegExp(/^\d\d\/\d\d\/\d\d\d\d$/);
@@ -173,10 +135,17 @@ function handleFormInput() {
     // Split the input string up by /, and convert each segment to a number before assigning.
     const [ddOfBirth, mmOfBirth, yyyyOfBirth] = dateOfBirth.split('/').map(n => Number(n));
 
+    // Quick bit of validation:
+    if (ddOfBirth === 0 || mmOfBirth === 0 || yyyyOfBirth === 0) {
+        validationErrorMessage();
+        return;
+    }
+    // (pattern attribute in HTML actually handles it OK, so this is just an example)
+
     if (isUser18OrOver(ddOfBirth, mmOfBirth, yyyyOfBirth)) {
-        successPage();
+        successMessage();
     } else {
-        tooYoungPage();
+        tooYoungMessage();
     }
 
 }
@@ -187,3 +156,40 @@ formEl.addEventListener('submit', (event) => {
     // Check the age
     handleFormInput();
 });
+
+
+/*
+function brokenAgeCalc(ddOfBirth, mmOfBirth, yyyyOfBirth) {
+
+    // The ms method doesn't work because ages are calculated by calendar date, not "actual age"!
+
+    //  Calculate the age (just roughly for now):
+    //      - In a real system, we'd maybe use a well-tested library to do this.
+    //      - Here, we'll code an approximation from scratch that's "good enough".
+    //      - (i.e. if today is your 18th birthday or later, you're 18)
+    
+
+    // Number of ms between epoch (January 1, 1970 00:00:00 UTC) and DOB:
+    const msBetweenDOBAndEpoch = Date.parse(`${yyyyOfBirth}-${mmOfBirth}-${ddOfBirth}`);
+    // (It's negative if DOB is before epoch.)
+
+    // Number of ms between epoch and now:
+    const msSinceEpoch = Date.now();
+
+    // We don't need to check sign of msBetweenDOBAndEpoch, as double negatives cancel.
+    const ageInMs = msSinceEpoch - msBetweenDOBAndEpoch;
+
+    //Number of ms in one year:
+    //      - Roughly; mean number of days per year in Gregorian calendar is 365.2425
+    //          (src: https://en.wikipedia.org/wiki/Gregorian_calendar)
+    //      - 1000ms in 1s; 60s in 1min; 60min in 1h; 24h in 1day; ~365days in 1 year
+    const numberOfMsInYear = 1000 * 60 * 60 * 24 * 365.2425;
+
+    // We only need the integer:
+    const ageInYears = Math.floor(ageInMs / numberOfMsInYear);
+    //const ageInYears = ageInMs / numberOfMsInYear;
+
+    console.log(ageInYears);
+
+}
+*/

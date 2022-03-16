@@ -4,12 +4,16 @@
 }
 
 body {
-
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
 }
 
 #everything {
+    background-color: #fff;
     margin: 0 auto;
-    max-width: 42rem;
+    max-width: 46rem;
+    padding: 2rem;
 }
 
 label, input {
@@ -37,4 +41,13 @@ input[type="submit"] {
 .helptext {
     color: hsl(0, 0%, 60%);
     font-size: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.error-message {
+    background-color: lightsalmon;
+    padding: 0.5rem;
 }
