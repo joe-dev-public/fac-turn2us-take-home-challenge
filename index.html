@@ -4,25 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joe's Turn2us take-home challenge</title>
+
+    <!-- Similar to Turn2us's General Sans: -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet"> 
+
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <div id="everything">
 
-    <header>
-        <h1>Check if you're eligible to apply for benefits</h1>
-    </header>
+        <header>
+            <h1>Check if you're eligible to apply for benefits</h1>
+        </header>
 
-    <main>
-        <form>
-            <label>
-                What is your date of birth?
-                <input name="dateOfBirth" type="text" placeholder="dd/mm/yyyy" required>
-            </label>
-            <input type="submit" value="Submit">
-        </form>
-    </main>
+        <main>
+            <p class="error-message hidden"></p>
+            <form>
+                <label>
+                    What is your date of birth?
+                    <!-- Got pattern info from https://stackoverflow.com/questions/50052571/html-date-input-without-the-date-picker -->
+                    <input name="dateOfBirth" type="text" placeholder="dd/mm/yyyy" required pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}">
+                    <span class="helptext">dd/mm/yyyy</span>
+                </label>
+                <input type="submit" value="Submit">
+            </form>
+        </main>
 
     </div>
 </body>
