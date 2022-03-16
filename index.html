@@ -24,7 +24,8 @@
             <form>
                 <label>
                     What is your date of birth?
-                    <input name="dateOfBirth" type="text" placeholder="dd/mm/yyyy" required>
+                    <!-- Got pattern info from https://stackoverflow.com/questions/50052571/html-date-input-without-the-date-picker -->
+                    <input name="dateOfBirth" type="text" placeholder="dd/mm/yyyy" required pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}">
                     <span class="helptext">dd/mm/yyyy</span>
                 </label>
                 <input type="submit" value="Submit">

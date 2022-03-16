@@ -9,6 +9,32 @@ const mainEl = document.querySelector('main');
         - format input as it's typed (as Turn2us form does)
         - validate input (to some extent) as it's typed?
 */
+dateOfBirthInputEl.addEventListener('keydown', (event) => {
+
+    const keycode = event.code;
+
+    //console.log(keycode);
+
+    // Digit[0-9], Numpad[0-9], Slash, etc. are OK
+    const reDigit = new RegExp(/^Digit[0-9]$/);
+    const reNumpad = new RegExp(/^Numpad[0-9]$/);
+    const reSlash = new RegExp(/^Slash$/);
+    const reOthers = new RegExp(/^(Backspace|Delete|Enter|NumpadEnter|Tab|Home|End|ArrowLeft|ArrowRight|ShitLeft|ShiftRight|ControlLeft|ControlRight)$/);
+
+    // This maybe isn't the best approach, because it could mess with some user prefs.
+
+
+    if (
+        reDigit.test(keycode) === false &&
+        reNumpad.test(keycode) === false &&
+        reSlash.test(keycode) === false &&
+        reOthers.test(keycode) === false
+    ) {
+        event.preventDefault();
+    }
+
+});
+
 dateOfBirthInputEl.addEventListener('input', (event) => {
 
     /*  Validation: allow
@@ -20,6 +46,8 @@ dateOfBirthInputEl.addEventListener('input', (event) => {
         (Could the browser handle this for us, e.g. input type=date with the date-picker
         suppressed?)
     */
+
+
 
     /*
         Formatting:
