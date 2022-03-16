@@ -120,7 +120,11 @@ function handleFormInput() {
     // Split the input string up by /, and convert each segment to a number before assigning.
     const [ddOfBirth, mmOfBirth, yyyyOfBirth] = dateOfBirth.split('/').map(n => Number(n));
 
-    console.log(isUser18OrOver(ddOfBirth, mmOfBirth, yyyyOfBirth));
+    if (isUser18OrOver(ddOfBirth, mmOfBirth, yyyyOfBirth)) {
+        successPage();
+    } else {
+        tooYoungPage();
+    }
 
 }
 
