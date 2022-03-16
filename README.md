@@ -13,3 +13,4 @@
 - Format the input as it's typed, e.g. like Turn2us do: ```__/__/____```
 - Better validation of input as it's typed (and after)
   - Make sure that the date is the accepted format (day 01-31, month 01-12), and a valid date (actually in the calendar, so not 31st Feb for example).
+- Better user feedback if the date isn't entered correctly
